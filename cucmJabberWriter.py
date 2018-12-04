@@ -50,7 +50,7 @@ class cucmJabberWriter:
     def __init__(self, sAMAccountName, DID, EpriseExt, Building, City, VM='f',
                  VMprofile='voicemailusertemplate', CoS='International',
                  SNR='f', SNRphone='', PIN='232323', gFirstName='GetAD!',
-                 gLastName='GetAD!'):
+                 gLastName='GetAD!', country_code="1"):
 
         self._setsAMAccountName(sAMAccountName)
         self._setDID(DID)
@@ -100,7 +100,7 @@ class cucmJabberWriter:
         return self._userEpriseExt
 
     def getE164Ext(self):
-        return "\+1" + self._userDID
+        return "\+" + self.country_code + self._userDID
 
     def _setBuilding(self, building):
         self._givenBuilding = building
