@@ -147,12 +147,13 @@ class cucmAxlWriter:
         except Exception as e:
             return False
 
-    def lineAdd(self, extension, firstname, lastname, building, city,
+    def lineAdd(self, extension, firstname, lastname, device_pool, city,
                 vm='True', vmProfileName="<None>", partition='Internal PAR',
                 usage='Device'):
         if not self.lineExists(extension):
             try:
                 # devCss = city+' International CSS'
+                # TODO: How to change this based on other CSS changes
                 fwdCss = city+' Long Distance CSS'
                 # lineCss = 'Class - International'
                 vmConfig = {
@@ -252,13 +253,13 @@ class cucmAxlWriter:
             return False
 
     def deviceAdd(self, username, firstname, lastname, e164ext, extension, did,
-                  building, city, devicetype, partition='Internal PAR'):
+                  device_pool, call_search_space, devicetype, partition='Internal PAR'):
 
         nameString = firstname + " " + lastname
-        nameDevicePool = building+' DP'
+        nameDevicePool = device_pool
         deviceName = self.deviceGetName(username, devicetype)
         tempPhoneConfigName = 'Standard Common Phone Profile'
-        devCss = city+' International CSS'
+        devCss = call_search_space
 
         if devicetype == 'CSF':
             tempProduct = 'Cisco Unified Client Services Framework'
@@ -358,7 +359,7 @@ class cucmAxlWriter:
             return False
 
     def rdpAdd(self, username, firstname, lastname, e164ext, did, extension,
-               building, city, partition='Internal PAR'):
+               device_pool, calling_search_space, partition='Internal PAR'):
         deviceName = "RDP"+username
         if not self.deviceExists(deviceName):
             try:
@@ -376,8 +377,8 @@ class cucmAxlWriter:
 
                 cawLogger.debug(tempPhoneLine1)
 
-                nameCss = city+' International CSS'
-                nameDevicePool = building+' DP'
+                nameCss = calling_search_space
+                nameDevicePool = device_pool
 
                 rdpPackage = self.factory.XRemoteDestinationProfile()
                 rdpPackage.name = deviceName
