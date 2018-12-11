@@ -81,7 +81,7 @@ Line Calling Search Space
 myJabber = cucmJabberWriter(sAMAccountName=options.username,
                             DID=options.did,
                             EpriseExt=options.extension,
-                            Building=options.building,
+                            device_pool=options.building,
                             City=options.city,
                             VM=options.vm,
                             VMprofile=options.vmprofile,
