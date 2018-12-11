@@ -154,7 +154,8 @@ class cucmAxlWriter:
             try:
                 # devCss = city+' International CSS'
                 # TODO: How to change this based on other CSS changes
-                fwdCss = city+' Long Distance CSS'
+                # TODO: Make this a variables passed in to fix other problems
+                fwdCss = city
                 # lineCss = 'Class - International'
                 vmConfig = {
                     'forwardToVoiceMail': vm,
@@ -253,13 +254,13 @@ class cucmAxlWriter:
             return False
 
     def deviceAdd(self, username, firstname, lastname, e164ext, extension, did,
-                  device_pool, call_search_space, devicetype, partition='Internal PAR'):
+                  device_pool, calling_search_space, devicetype, partition='Internal PAR'):
 
         nameString = firstname + " " + lastname
         nameDevicePool = device_pool
         deviceName = self.deviceGetName(username, devicetype)
         tempPhoneConfigName = 'Standard Common Phone Profile'
-        devCss = call_search_space
+        devCss = calling_search_space
 
         if devicetype == 'CSF':
             tempProduct = 'Cisco Unified Client Services Framework'
