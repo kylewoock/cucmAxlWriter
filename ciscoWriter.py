@@ -50,6 +50,8 @@ parser.add_option("-b", "--emailaddress", action="store", type="string",
                   dest="emailaddress", help="jabber user Email Address")
 parser.add_option("-p", "--vmprofile", action="store", type="string",
                   dest="vmprofile", help="UCM user Voicemail profile")
+parser.add_option("-k", "--countrycode", action="store", type="string",
+                  dest="country_code", help="Country code used to form E.164 number")
 # if a specific profile is to be provided, it must be provided
 # if system default profile of "<None>" is desired, omit the -p switch
 parser.add_option("-t", "--vmtemplate", action="store", type="string",
@@ -90,7 +92,8 @@ myJabber = cucmJabberWriter(sAMAccountName=options.username,
                             SNRphone=options.snrphone,
                             PIN=options.pin,
                             gFirstName=options.firstname,
-                            gLastName=options.lastname)
+                            gLastName=options.lastname,
+                            country_code=options.country_code)
 
 myVoicemail = cupiRestWriter(Alias=options.username,
                              Extension="+1" + options.did,
