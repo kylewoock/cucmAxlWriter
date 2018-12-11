@@ -149,13 +149,13 @@ class cucmAxlWriter:
 
     def lineAdd(self, extension, firstname, lastname, device_pool, city,
                 vm='True', vmProfileName="<None>", partition='Internal PAR',
-                usage='Device'):
+                usage='Device', cfw_css='None'):
         if not self.lineExists(extension):
             try:
                 # devCss = city+' International CSS'
                 # TODO: How to change this based on other CSS changes
                 # TODO: Make this a variables passed in to fix other problems
-                fwdCss = city
+                fwdCss = cfw_css
                 # lineCss = 'Class - International'
                 vmConfig = {
                     'forwardToVoiceMail': vm,
@@ -202,9 +202,9 @@ class cucmAxlWriter:
         else:
             raise Exception("Line already exists")
 
-    def lineUpdate(self, extension, did):
+    def lineUpdate(self, extension, did, country_code):
         result = self.service.updateLine(pattern=extension,
-                                         e164AltNum={'numMask': '+1' + did,
+                                         e164AltNum={'numMask': '+' + country_code + did,
                                                      'isUrgent': 'false',
                                                      'addLocalRoutePartition':
                                                      'false',
@@ -295,7 +295,8 @@ class cucmAxlWriter:
                 tempPhoneLine1.label = nameString + " " + extension
                 tempPhoneLine1.display = nameString
                 tempPhoneLine1.displayAscii = nameString
-                tempPhoneLine1.e164Mask = did
+                # TODO: I think this is just the normal mask if that is so it needs to be removed
+                #tempPhoneLine1.e164Mask = did
 
                 tempPhoneLine1.associatedEndusers = {'enduser':
                                                      {'userId': username}}

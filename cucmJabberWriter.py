@@ -50,7 +50,7 @@ class cucmJabberWriter:
     def __init__(self, sAMAccountName, DID, EpriseExt, device_pool, City, VM='f',
                  VMprofile='voicemailusertemplate', CoS='International',
                  SNR='f', SNRphone='', PIN='232323', gFirstName='GetAD!',
-                 gLastName='GetAD!', country_code="1"):
+                 gLastName='GetAD!', country_code="1", cfw_css="None", device_css="None"):
 
         self._setsAMAccountName(sAMAccountName)
         self._setDID(DID)
@@ -63,6 +63,8 @@ class cucmJabberWriter:
         self._setSNR(SNR)
         self._setSNRphone(SNRphone)
         self.country_code = country_code
+        self.cfw_css = cfw_css
+        self.device_css = device_css
         user = self.myCucmAxlWriter.userGet(username=self.getsAMAccountName())
         cjwLogger.debug(user)
 
@@ -179,6 +181,7 @@ class cucmJabberWriter:
                                          lastname=self.getLastName(),
                                          device_pool=self.getBuilding(),
                                          city=self.getCity(),
+                                         cfw_css=self.cfw_css
                                          vm='True',
                                          # vm=self.getVM()) # original code
                                          vmProfileName=self.getVMprofile())
@@ -198,7 +201,8 @@ class cucmJabberWriter:
         if self.myCucmAxlWriter.lineExists(self.getE164Ext()):
             cjwLogger.info("Line exists, updating")
             self.myCucmAxlWriter.lineUpdate(extension=self.getE164Ext(),
-                                            did=self.getDID())
+                                            did=self.getDID(),
+                                            country_code=self.country_code)
             return "Success"  # Line Updated
         else:
             cjwLogger.info("updateJabberLine does NOT exist")
@@ -232,7 +236,7 @@ class cucmJabberWriter:
                                                e164ext=self.getE164Ext(),
                                                did=self.getDID(),
                                                device_pool=self.getBuilding(),
-                                               calling_search_space=self.getCity(),
+                                               calling_search_space=self.device_css,
                                                devicetype=jabberType)
                 status.update({"{0}".format(jabberType): "Success"})
                 cjwLogger.info("%s createJabberDevice done", jabberType)
