@@ -52,6 +52,10 @@ parser.add_option("-p", "--vmprofile", action="store", type="string",
                   dest="vmprofile", help="UCM user Voicemail profile")
 parser.add_option("-k", "--countrycode", action="store", type="string",
                   dest="country_code", help="Country code used to form E.164 number")
+parser.add_option("-f", "--cfwcss", action="store", type="string",
+                  dest="cfw_css", help="CSS for the Call Forwarding Options")
+parser.add_option("-o", "--devicess", action="store", type="string",
+                  dest="device_css", help="Calling Search Space for the device")
 # if a specific profile is to be provided, it must be provided
 # if system default profile of "<None>" is desired, omit the -p switch
 parser.add_option("-t", "--vmtemplate", action="store", type="string",
