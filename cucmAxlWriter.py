@@ -147,13 +147,15 @@ class cucmAxlWriter:
         except Exception as e:
             return False
 
-    def lineAdd(self, extension, firstname, lastname, building, city,
+    def lineAdd(self, extension, firstname, lastname, device_pool, city,
                 vm='True', vmProfileName="<None>", partition='Internal PAR',
-                usage='Device'):
+                usage='Device', cfw_css='None'):
         if not self.lineExists(extension):
             try:
                 # devCss = city+' International CSS'
-                fwdCss = city+' Long Distance CSS'
+                # TODO: How to change this based on other CSS changes
+                # TODO: Make this a variables passed in to fix other problems
+                fwdCss = cfw_css
                 # lineCss = 'Class - International'
                 vmConfig = {
                     'forwardToVoiceMail': vm,
@@ -200,9 +202,9 @@ class cucmAxlWriter:
         else:
             raise Exception("Line already exists")
 
-    def lineUpdate(self, extension, did):
+    def lineUpdate(self, extension, did, country_code):
         result = self.service.updateLine(pattern=extension,
-                                         e164AltNum={'numMask': '+1' + did,
+                                         e164AltNum={'numMask': '+' + country_code + did,
                                                      'isUrgent': 'false',
                                                      'addLocalRoutePartition':
                                                      'false',
@@ -252,13 +254,13 @@ class cucmAxlWriter:
             return False
 
     def deviceAdd(self, username, firstname, lastname, e164ext, extension, did,
-                  building, city, devicetype, partition='Internal PAR'):
+                  device_pool, calling_search_space, devicetype, partition='Internal PAR'):
 
         nameString = firstname + " " + lastname
-        nameDevicePool = building+' DP'
+        nameDevicePool = device_pool
         deviceName = self.deviceGetName(username, devicetype)
         tempPhoneConfigName = 'Standard Common Phone Profile'
-        devCss = city+' International CSS'
+        devCss = calling_search_space
 
         if devicetype == 'CSF':
             tempProduct = 'Cisco Unified Client Services Framework'
@@ -293,7 +295,8 @@ class cucmAxlWriter:
                 tempPhoneLine1.label = nameString + " " + extension
                 tempPhoneLine1.display = nameString
                 tempPhoneLine1.displayAscii = nameString
-                tempPhoneLine1.e164Mask = did
+                # TODO: I think this is just the normal mask if that is so it needs to be removed
+                # tempPhoneLine1.e164Mask = did
 
                 tempPhoneLine1.associatedEndusers = {'enduser':
                                                      {'userId': username}}
@@ -358,7 +361,7 @@ class cucmAxlWriter:
             return False
 
     def rdpAdd(self, username, firstname, lastname, e164ext, did, extension,
-               building, city, partition='Internal PAR'):
+               device_pool, calling_search_space, partition='Internal PAR'):
         deviceName = "RDP"+username
         if not self.deviceExists(deviceName):
             try:
@@ -376,8 +379,8 @@ class cucmAxlWriter:
 
                 cawLogger.debug(tempPhoneLine1)
 
-                nameCss = city+' International CSS'
-                nameDevicePool = building+' DP'
+                nameCss = calling_search_space
+                nameDevicePool = device_pool
 
                 rdpPackage = self.factory.XRemoteDestinationProfile()
                 rdpPackage.name = deviceName

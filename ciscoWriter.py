@@ -50,6 +50,12 @@ parser.add_option("-b", "--emailaddress", action="store", type="string",
                   dest="emailaddress", help="jabber user Email Address")
 parser.add_option("-p", "--vmprofile", action="store", type="string",
                   dest="vmprofile", help="UCM user Voicemail profile")
+parser.add_option("-k", "--countrycode", action="store", type="string",
+                  dest="country_code", help="Country code used to form E.164 number")
+parser.add_option("-w", "--cfwcss", action="store", type="string",
+                  dest="cfw_css", help="CSS for the Call Forwarding Options")
+parser.add_option("-o", "--devicess", action="store", type="string",
+                  dest="device_css", help="Calling Search Space for the device")
 # if a specific profile is to be provided, it must be provided
 # if system default profile of "<None>" is desired, omit the -p switch
 parser.add_option("-t", "--vmtemplate", action="store", type="string",
@@ -81,7 +87,7 @@ Line Calling Search Space
 myJabber = cucmJabberWriter(sAMAccountName=options.username,
                             DID=options.did,
                             EpriseExt=options.extension,
-                            Building=options.building,
+                            device_pool=options.building,
                             City=options.city,
                             VM=options.vm,
                             VMprofile=options.vmprofile,
@@ -90,7 +96,10 @@ myJabber = cucmJabberWriter(sAMAccountName=options.username,
                             SNRphone=options.snrphone,
                             PIN=options.pin,
                             gFirstName=options.firstname,
-                            gLastName=options.lastname)
+                            gLastName=options.lastname,
+                            country_code=options.country_code,
+                            cfw_css=options.cfw_css,
+                            device_css=options.device_css)
 
 myVoicemail = cupiRestWriter(Alias=options.username,
                              Extension="+1" + options.did,

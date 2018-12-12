@@ -47,21 +47,24 @@ class cucmJabberWriter:
     # Meet me config? (maybe)
     myCucmAxlWriter = cucmAxlWriter()
 
-    def __init__(self, sAMAccountName, DID, EpriseExt, Building, City, VM='f',
+    def __init__(self, sAMAccountName, DID, EpriseExt, device_pool, City, VM='f',
                  VMprofile='voicemailusertemplate', CoS='International',
                  SNR='f', SNRphone='', PIN='232323', gFirstName='GetAD!',
-                 gLastName='GetAD!'):
+                 gLastName='GetAD!', country_code="1", cfw_css="None", device_css="None"):
 
         self._setsAMAccountName(sAMAccountName)
         self._setDID(DID)
         self._setEpriseExt(EpriseExt)
-        self._setBuilding(Building)
+        self._set_device_pool(device_pool)
         self._setCity(City)
         self._setVM(VM)
         self._setVMprofile(VMprofile)
         self._setCoS(CoS)
         self._setSNR(SNR)
         self._setSNRphone(SNRphone)
+        self.country_code = country_code
+        self.cfw_css = cfw_css
+        self.device_css = device_css
         user = self.myCucmAxlWriter.userGet(username=self.getsAMAccountName())
         cjwLogger.debug(user)
 
@@ -100,10 +103,10 @@ class cucmJabberWriter:
         return self._userEpriseExt
 
     def getE164Ext(self):
-        return "\+1" + self._userDID
+        return "\+" + self.country_code + self._userDID
 
-    def _setBuilding(self, building):
-        self._givenBuilding = building
+    def _set_device_pool(self, device_pool):
+        self._givenBuilding = device_pool
 
     def getBuilding(self):
         return self._givenBuilding
@@ -176,8 +179,9 @@ class cucmJabberWriter:
             self.myCucmAxlWriter.lineAdd(extension=self.getE164Ext(),
                                          firstname=self.getFirstName(),
                                          lastname=self.getLastName(),
-                                         building=self.getBuilding(),
+                                         device_pool=self.getBuilding(),
                                          city=self.getCity(),
+                                         cfw_css=self.cfw_css,
                                          vm='True',
                                          # vm=self.getVM()) # original code
                                          vmProfileName=self.getVMprofile())
@@ -197,7 +201,8 @@ class cucmJabberWriter:
         if self.myCucmAxlWriter.lineExists(self.getE164Ext()):
             cjwLogger.info("Line exists, updating")
             self.myCucmAxlWriter.lineUpdate(extension=self.getE164Ext(),
-                                            did=self.getDID())
+                                            did=self.getDID(),
+                                            country_code=self.country_code)
             return "Success"  # Line Updated
         else:
             cjwLogger.info("updateJabberLine does NOT exist")
@@ -230,8 +235,8 @@ class cucmJabberWriter:
                                                extension=self.getEpriseExt(),
                                                e164ext=self.getE164Ext(),
                                                did=self.getDID(),
-                                               building=self.getBuilding(),
-                                               city=self.getCity(),
+                                               device_pool=self.getBuilding(),
+                                               calling_search_space=self.device_css,
                                                devicetype=jabberType)
                 status.update({"{0}".format(jabberType): "Success"})
                 cjwLogger.info("%s createJabberDevice done", jabberType)
@@ -259,8 +264,8 @@ class cucmJabberWriter:
                                              e164ext=self.getE164Ext(),
                                              did=self.getDID(),
                                              extension=self.getEpriseExt(),
-                                             building=self.getBuilding(),
-                                             city=self.getCity())
+                                             device_pool=self.getBuilding(),
+                                             calling_search_space=self.getCity())
         cjwLogger.debug(result)
         return "Success"
 
