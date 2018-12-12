@@ -296,7 +296,7 @@ class cucmAxlWriter:
                 tempPhoneLine1.display = nameString
                 tempPhoneLine1.displayAscii = nameString
                 # TODO: I think this is just the normal mask if that is so it needs to be removed
-                #tempPhoneLine1.e164Mask = did
+                # tempPhoneLine1.e164Mask = did
 
                 tempPhoneLine1.associatedEndusers = {'enduser':
                                                      {'userId': username}}

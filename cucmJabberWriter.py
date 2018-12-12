@@ -181,7 +181,7 @@ class cucmJabberWriter:
                                          lastname=self.getLastName(),
                                          device_pool=self.getBuilding(),
                                          city=self.getCity(),
-                                         cfw_css=self.cfw_css
+                                         cfw_css=self.cfw_css,
                                          vm='True',
                                          # vm=self.getVM()) # original code
                                          vmProfileName=self.getVMprofile())
