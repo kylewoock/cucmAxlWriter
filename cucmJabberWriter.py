@@ -200,8 +200,8 @@ class cucmJabberWriter:
         cjwLogger.info("updateJabberLine called")
         if self.myCucmAxlWriter.lineExists(self.getE164Ext()):
             cjwLogger.info("Line exists, updating")
-            self.myCucmAxlWriter.lineUpdate(extension=self.getE164Ext(),
-                                            did=self.getDID(),
+            self.myCucmAxlWriter.lineUpdate(e164extension=self.getE164Ext(),
+                                            eprise_extension=self.getEpriseExt(),
                                             country_code=self.country_code)
             return "Success"  # Line Updated
         else:
