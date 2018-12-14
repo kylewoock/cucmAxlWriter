@@ -186,8 +186,8 @@ class cucmAxlWriter:
                 addlinepackage.alertingName = nameString
                 addlinepackage.asciiAlertingName = nameString
                 addlinepackage.description = nameString
-
                 addlinepackage.voiceMailProfileName = vmProfileName
+                addlinepackage.shareLineAppearanceCssName = city
 
                 cawLogger.info("Line Factory Completed")
                 cawLogger.debug(addlinepackage)
@@ -202,14 +202,13 @@ class cucmAxlWriter:
         else:
             raise Exception("Line already exists")
 
-    def lineUpdate(self, extension, did, country_code):
-        result = self.service.updateLine(pattern=extension,
-                                         e164AltNum={'numMask': '+' + country_code + did,
+    def lineUpdate(self, e164extension, eprise_extension, country_code):
+        result = self.service.updateLine(pattern=e164extension,
+                                         e164AltNum={'numMask': eprise_extension,
                                                      'isUrgent': 'false',
-                                                     'addLocalRoutePartition':
-                                                     'false',
-                                                     'advertiseGloballyIls':
-                                                     'true'})
+                                                     'addLocalRoutePartition': 'true',
+                                                     'routePartition': 'Internal PAR',
+                                                     'advertiseGloballyIls': 'true'})
         cawLogger.info("lineUpdate Completed")
         cawLogger.debug(result)
 
